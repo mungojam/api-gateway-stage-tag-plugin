@@ -32,16 +32,18 @@ class ServerlessPlugin {
         } else {
           const restApiId = apiDeploymentObj.RestApiId;
 
-          if (this.serverless.service.custom && this.serverless.service.custom.apiStageTags) { 
+          if (this.serverless.service.custom && this.serverless.service.custom.apiStageTags) {
+            const resourceArn = `arn:aws:apigateway:${this.options.region}::/restapis/${restApiId}/stages/${this.options.stage}`;
+            
             const apiParams = {
-              resourceArn: `arn:aws:apigateway:${this.options.region}::/restapis/${restApiId}/stages/${this.options.stage}`,
+              resourceArn: resourceArn,
               tags: this.serverless.service.custom.apiStageTags
             };
-
+            
             // eslint-disable-next-line no-unused-vars
             this.apigwService.tagResource(apiParams, (apiErr, apiData) => {
               if (apiErr) {
-                this.serverless.cli.log('[ERROR]: Could not tag API Gateway resource');
+                this.serverless.cli.log(`[ERROR]: Could not tag API Gateway resource: ${resourceArn}`);
                 this.serverless.cli.log(apiErr, apiErr.stack);
               } else {
                 this.serverless.cli.log(`Tagged API gateway stage ${restApiId}/${this.options.stage}`);
