@@ -25,10 +25,10 @@ class ServerlessPlugin {
         this.serverless.cli.log(err);
       } else {
         const apiDeploymentObj = data.StackResources.find((element) => {
-          return element.ResourceType === 'AWS::ApiGateway::RestApi';
+          return element.ResourceType === 'AWS::ApiGateway::Deployment';
         });
         if (!apiDeploymentObj) {
-          this.serverless.cli.log('Unable to resolve ApiGateway::RestApi.  No API Gateway stages tagged.');
+          this.serverless.cli.log('Unable to resolve AWS::ApiGateway::Deployment.  No API Gateway stages tagged.');
         } else {
           const restApiId = apiDeploymentObj.RestApiId;
 
