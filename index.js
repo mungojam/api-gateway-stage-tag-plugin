@@ -24,13 +24,13 @@ class ServerlessPlugin {
         this.serverless.cli.log('[ERROR]: Could not describe stack resources.');
         this.serverless.cli.log(err);
       } else {
-        const apiObj = data.StackResources.find((element) => {
+        const apiDeploymentObj = data.StackResources.find((element) => {
           return element.ResourceType === 'AWS::ApiGateway::RestApi';
         });
-        if (!apiObj) {
+        if (!apiDeploymentObj) {
           this.serverless.cli.log('Unable to resolve ApiGateway::RestApi.  No API Gateway stages tagged.');
         } else {
-          const restApiId = apiObj.PhysicalResourceId;
+          const restApiId = apiDeploymentObj.RestApiId;
 
           if (this.serverless.service.custom && this.serverless.service.custom.apiStageTags) { 
             const apiParams = {
